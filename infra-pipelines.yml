@@ -27,20 +27,16 @@ stages:
     jobs:
       - job: Init
         steps:
-          - task: TerraformInstaller@1
+          - task: TerraformInstaller@2
             displayName: Install Terraform
             inputs:
               terraformVersion: 'latest'
-          - task: TerraformTask@5
+          - task: TerraformCLI@0
             inputs:
-              provider: 'azurerm'
+              
               command: 'init'
               backendServiceArm: service_connection1
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-              backendAzureRmResourceGroupName: 'proj-rg-01'
-              backendAzureRmStorageAccountName: 'projstorage01'
-              backendAzureRmContainerName: 'tfstate'
-              backendAzureRmKey: ${{ parameters.environment }}.terraform.tfstate
               commandOptions: -upgrade -reconfigure -backend-config="environments/${{ parameters.environment }}/backend.config"
 
     
@@ -51,11 +47,11 @@ stages:
     jobs:
     - job: Plan
       steps:
-        - task: TerraformTask@5
+        - task: TerraformCLI@0
           inputs:
-            provider: 'azurerm'
+            
             command: 'plan'
-            environmentServiceNameAzureRM: service_connection1
+            environmentServiceName: service_connection1
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
             commandOptions: -var-file="environments/${{ parameters.environment }}/terraform.tfvars" -out=tfplan
   
@@ -77,11 +73,11 @@ stages:
       displayName: 'Terraform Apply'
       dependsOn: Validation
       steps:
-        - task: TerraformTask@5
+        - task: TerraformCLI@0
           displayName: 'terraform apply'
           inputs:
             command: 'apply'
-            environmentServiceNameAzureRM: service_connection1
+            environmentServiceName: service_connection1
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
             commandOptions: -auto-approve -var-file="environments/${{ parameters.environment }}/terraform.tfvars"
 
