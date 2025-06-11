@@ -1,0 +1,92 @@
+trigger :
+ branches:
+   include:
+     -  main
+pr:
+ branches:
+   include:
+     - main
+
+pool:
+ vmImage: ubuntu-latest
+
+parameters:
+  - name: environment
+    type: string
+    displayName: Select environment to provision infrastructure
+    default: dev
+    values:
+      - dev
+      - qa
+      - staging
+      - prod
+
+variables:
+  azureServiceConnection: 'azure_service_connection'
+
+stages:
+  - stage: Init
+    displayName: 'Terraform Init'
+    jobs:
+      - job: Init
+        steps:
+          - task: TerraformInstaller@1
+            displayName: Install Terraform
+            inputs:
+              terraformVersion: 'latest'
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: '$(azureServiceConnection)'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+              commandOptions: -upgrade -reconfigure -backend-config="environments/${{ parameters.environment }}/backend.config"
+
+    
+          
+  - stage: Plan
+    displayName: 'Terraform Plan'
+    dependsOn: Init
+    jobs:
+    - job: Plan
+      steps:
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            environmentServiceNameAzureRM: '$(azureServiceConnection)'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+            commandOptions: -var-file="environments/${{ parameters.environment }}/terraform.tfvars" -out=tfplan
+  
+  - stage: Apply
+    displayName: 'Terraform Apply'
+    dependsOn: Plan
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+    - job: Validation
+      displayName: 'Wait for Approval'
+      pool: server
+      timeoutInMinutes: 4320 # 3 days
+      steps:
+        - task: ManualValidation@0
+          inputs:
+            instructions: 'Approve to deploy to $(parameters.environment)'
+            onTimeout: 'reject'
+    - job: Apply
+      displayName: 'Terraform Apply'
+      dependsOn: Validation
+      steps:
+        - task: TerraformTask@5
+          displayName: 'terraform apply'
+          inputs:
+            command: 'apply'
+            environmentServiceNameAzureRM: :'$(azureServiceConnection)'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+            commandOptions: -auto-approve -var-file="environments/${{ parameters.environment }}/terraform.tfvars"
+
+
+
+
+          
+            
+    
