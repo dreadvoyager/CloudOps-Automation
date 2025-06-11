@@ -43,7 +43,15 @@ stages:
     jobs:
     - job: Plan
       steps:
-        - task: TerraformCLI@0
+      
+        - task: TerraformCLI@1
+          inputs:
+              
+            command: 'init'
+            backendServiceArm: adeebahmed_khan@epam.com(5cee968e-0ccf-40be-819c-34d922970b94)
+            workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+            commandOptions: -upgrade -reconfigure -backend-config="environments/${{ parameters.environment }}/backend.config"
+        - task: TerraformCLI@1
           inputs:
             
             command: 'plan'
@@ -69,7 +77,14 @@ stages:
       displayName: 'Terraform Apply'
       dependsOn: Validation
       steps:
-        - task: TerraformCLI@0
+        - task: TerraformCLI@1
+          inputs:
+              
+            command: 'init'
+            backendServiceArm: adeebahmed_khan@epam.com(5cee968e-0ccf-40be-819c-34d922970b94)
+            workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+            commandOptions: -upgrade -reconfigure -backend-config="environments/${{ parameters.environment }}/backend.config"
+        - task: TerraformCLI@1
           displayName: 'terraform apply'
           inputs:
             command: 'apply'
