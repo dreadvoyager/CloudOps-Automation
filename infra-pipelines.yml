@@ -7,8 +7,7 @@ pr:
    include:
      - main
 
-pool:
- vmImage: ubuntu-latest
+pool: Default
 
 parameters:
   - name: environment
@@ -27,14 +26,15 @@ stages:
     jobs:
       - job: Init
         steps:
-          - task: TerraformCLI@0
+
+          - task: TerraformCLI@1
+            displayName: 'Terraform Init'
             inputs:
               
               command: 'init'
               backendServiceArm: service_connection1
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
               commandOptions: -upgrade -reconfigure -backend-config="environments/${{ parameters.environment }}/backend.config"
-
     
           
   - stage: Plan
