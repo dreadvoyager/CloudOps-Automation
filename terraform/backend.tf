@@ -1,0 +1,9 @@
+terraform {
+  backend "azurerm" {
+    resource_group_name  = "proj-rg-01"
+    storage_account_name = "projstorage01"
+    container_name       = "tfstate"
+
+  }
+}
+
