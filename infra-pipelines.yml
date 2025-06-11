@@ -27,10 +27,6 @@ stages:
     jobs:
       - job: Init
         steps:
-          - task: TerraformInstaller@2
-            displayName: Install Terraform
-            inputs:
-              terraformVersion: 'latest'
           - task: TerraformCLI@0
             inputs:
               
@@ -83,7 +79,4 @@ stages:
 
 
 
-
-          
-            
     
