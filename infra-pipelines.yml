@@ -32,7 +32,7 @@ stages:
             inputs:
               
               command: 'init'
-              backendServiceArm: service_connection1
+              backendServiceArm: adeebahmed_khan@epam.com(5cee968e-0ccf-40be-819c-34d922970b94)
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
               commandOptions: -upgrade -reconfigure -backend-config="environments/${{ parameters.environment }}/backend.config"
     
@@ -47,7 +47,7 @@ stages:
           inputs:
             
             command: 'plan'
-            environmentServiceName: service_connection1
+            environmentServiceName: adeebahmed_khan@epam.com(5cee968e-0ccf-40be-819c-34d922970b94)
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
             commandOptions: -var-file="environments/${{ parameters.environment }}/terraform.tfvars" -out=tfplan
   
@@ -73,7 +73,7 @@ stages:
           displayName: 'terraform apply'
           inputs:
             command: 'apply'
-            environmentServiceName: service_connection1
+            environmentServiceName: adeebahmed_khan@epam.com(5cee968e-0ccf-40be-819c-34d922970b94)
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
             commandOptions: -auto-approve -var-file="environments/${{ parameters.environment }}/terraform.tfvars"
 
