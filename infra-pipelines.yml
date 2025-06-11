@@ -35,7 +35,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
-              backendServiceArm: 'test'
+              backendServiceArm: test
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
               commandOptions: -upgrade -reconfigure -backend-config="environments/${{ parameters.environment }}/backend.config"
 
@@ -51,7 +51,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'plan'
-            environmentServiceNameAzureRM: 'test'
+            environmentServiceNameAzureRM: test
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
             commandOptions: -var-file="environments/${{ parameters.environment }}/terraform.tfvars" -out=tfplan
   
@@ -77,7 +77,7 @@ stages:
           displayName: 'terraform apply'
           inputs:
             command: 'apply'
-            environmentServiceNameAzureRM: :'test'
+            environmentServiceNameAzureRM: test
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
             commandOptions: -auto-approve -var-file="environments/${{ parameters.environment }}/terraform.tfvars"
 
