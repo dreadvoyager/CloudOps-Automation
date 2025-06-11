@@ -37,6 +37,10 @@ stages:
               command: 'init'
               backendServiceArm: service_connection1
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+              backendAzureRmResourceGroupName: 'proj-rg-01'
+              backendAzureRmStorageAccountName: 'projstorage01'
+              backendAzureRmContainerName: 'tfstate'
+              backendAzureRmKey: ${{ parameters.environment }}.terraform.tfstate
               commandOptions: -upgrade -reconfigure -backend-config="environments/${{ parameters.environment }}/backend.config"
 
     
