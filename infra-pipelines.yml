@@ -21,9 +21,6 @@ parameters:
       - staging
       - prod
 
-variables:
-  azureServiceConnection: 'azure_service_connection'
-
 stages:
   - stage: Init
     displayName: 'Terraform Init'
@@ -38,7 +35,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
-              backendServiceArm: '$(azureServiceConnection)'
+              backendServiceArm: 'azure_service_connection'
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
               commandOptions: -upgrade -reconfigure -backend-config="environments/${{ parameters.environment }}/backend.config"
 
@@ -54,7 +51,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'plan'
-            environmentServiceNameAzureRM: '$(azureServiceConnection)'
+            environmentServiceNameAzureRM: 'azure_service_connection'
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
             commandOptions: -var-file="environments/${{ parameters.environment }}/terraform.tfvars" -out=tfplan
   
@@ -80,7 +77,7 @@ stages:
           displayName: 'terraform apply'
           inputs:
             command: 'apply'
-            environmentServiceNameAzureRM: :'$(azureServiceConnection)'
+            environmentServiceNameAzureRM: :'azure_service_connection'
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
             commandOptions: -auto-approve -var-file="environments/${{ parameters.environment }}/terraform.tfvars"
 
