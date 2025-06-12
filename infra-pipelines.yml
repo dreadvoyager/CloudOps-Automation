@@ -68,11 +68,11 @@ stages:
     - job: Validation
       displayName: 'Wait for Approval'
       pool: server
-      timeoutInMinutes: 4320 # 3 days
+      timeoutInMinutes: 1440
       steps:
         - task: ManualValidation@0
           inputs:
-            instructions: 'Approve to deploy to $(parameters.environment)'
+            instructions: 'Approve to deploy to ${{ parameters.environment }} environment.'
             onTimeout: 'reject'
     - job: Apply
       displayName: 'Terraform Apply'
