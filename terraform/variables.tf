@@ -22,21 +22,8 @@ variable "system_node_pool_vm_size" {
   type        = string
 
 }
-variable "sql_admin_username" {
-  description = "The username for the SQL admin."
-  type        = string
 
-}
-variable "sql_admin_secret_name" {
-  description = "The name of the secret in Key Vault for the SQL admin username."
-  type        = string
 
-}
-variable "sql_password_secret_name" {
-  description = "The name of the secret in Key Vault for the SQL admin password."
-  type        = string
-
-}
 variable "sql_sku_name" {
   description = "The SKU name for the SQL database."
   type        = string
