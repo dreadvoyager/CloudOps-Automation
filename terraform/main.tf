@@ -42,19 +42,23 @@ module "sql" {
 data "azurerm_key_vault_secret" "sql_username" {
   name         = local.sql_admin_secret_name
   key_vault_id = module.key_vault.key_vault_id
+  depends_on = [ module.acr ]
 }
 
 data "azurerm_key_vault_secret" "sql_password" {
   name         = local.sql_password_secret_name
   key_vault_id = module.key_vault.key_vault_id
+  depends_on = [ data.azurerm_key_vault_secret.sql_username ]
 }
 data "azurerm_key_vault_secret" "sql_server_name" {
   name         = local.sql_server_name
   key_vault_id = module.key_vault.key_vault_id
+  depends_on = [ data.azurerm_key_vault_secret.sql_password ]
 }
 data "azurerm_key_vault_secret" "sql_db_name" {
   name         = local.sql_db_name
   key_vault_id = module.key_vault.key_vault_id
+  depends_on = [ data.azurerm_key_vault_secret.sql_server_name ]
 }
 
 module "web_app" {
@@ -75,7 +79,10 @@ module "web_app" {
   }
   
 
-  depends_on = [module.sql]
+  depends_on = [data.azurerm_key_vault_secret.sql_username, 
+                 data.azurerm_key_vault_secret.sql_password, 
+                 data.azurerm_key_vault_secret.sql_server_name, 
+                 data.azurerm_key_vault_secret.sql_db_name]
 }
 
 module "acr" {
@@ -85,6 +92,8 @@ module "acr" {
   acr_sku             = var.acr_sku
   acr_name            = local.acr_name
   tags                = local.tags
+
+  depends_on = [ module.sql ]
 }
 
 
@@ -105,6 +114,6 @@ module "aks" {
   key_vault_id = module.key_vault.key_vault_id
 
   tags       = local.tags
-  depends_on = [module.acr, module.key_vault]
+  depends_on = [module.web_app]
 }
 
