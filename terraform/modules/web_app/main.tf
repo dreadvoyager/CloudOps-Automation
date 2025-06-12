@@ -19,7 +19,7 @@ resource "azurerm_linux_web_app" "webapp" {
       node_version = "16-lts"
     }
   }
-
+app_settings = var.envvars
   connection_string {
     name  = "SQLConnectionString"
     type  = "SQLAzure"
