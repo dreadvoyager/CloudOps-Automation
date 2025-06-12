@@ -1,8 +1,8 @@
-environment              = "qa"
-location                 = "West US"
+environment = "qa"
+location    = "West US"
 
-sql_sku_name             = "Basic"
-key_vault_sku_name       = "standard"
+sql_sku_name       = "Basic"
+key_vault_sku_name = "standard"
 
 acr_sku = "Standard"
 
