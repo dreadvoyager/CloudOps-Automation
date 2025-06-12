@@ -34,3 +34,8 @@ variable "asp_sku" {
   type        = string
 
 }
+variable "envvars" {
+  description = "A map of environment variables to set for the web app."
+  type        = map(string)
+  sensitive = true
+}

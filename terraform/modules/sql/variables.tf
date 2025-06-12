@@ -18,10 +18,7 @@ variable "key_vault_name" {
   description = "The name of the Key Vault where secrets will be stored."
   type        = string
 }
-variable "sql_admin_username" {
-  description = "The administrator username for the SQL server."
-  type        = string
-}
+
 variable "sql_sku_name" {
   description = "The SKU name for the SQL database."
   type        = string

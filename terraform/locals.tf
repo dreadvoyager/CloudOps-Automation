@@ -14,4 +14,6 @@ locals {
   aks_name            = "proj-${var.environment}-aks"
   dns_name_label      = "${var.environment}dnslabel"
   dns_prefix          = "${var.environment}-k8s"
+  sql_admin_secret_name    = "${var.environment}-sql-admin"
+  sql_password_secret_name = "${var.environment}-sql-password"
 }

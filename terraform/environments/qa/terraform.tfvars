@@ -1,8 +1,6 @@
 environment              = "qa"
 location                 = "West US"
-sql_admin_username       = "qasqladmin"
-sql_admin_secret_name    = "qa-sql-admin"
-sql_password_secret_name = "qa-sql-password"
+
 sql_sku_name             = "Basic"
 key_vault_sku_name       = "standard"
 

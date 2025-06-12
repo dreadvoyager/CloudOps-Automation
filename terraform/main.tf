@@ -29,15 +29,32 @@ module "sql" {
   sql_server_name          = local.sql_server_name
   sql_db_name              = local.sql_db_name
   key_vault_name           = local.key_vault_name
-  sql_admin_username       = var.sql_admin_username
   sql_sku_name             = var.sql_sku_name
-  sql_admin_secret_name    = var.sql_admin_secret_name
-  sql_password_secret_name = var.sql_password_secret_name
+  sql_admin_secret_name    = local.sql_admin_secret_name
+  sql_password_secret_name = local.sql_password_secret_name
   key_vault_id             = module.key_vault.key_vault_id
 
   depends_on = [module.key_vault]
 
   tags = local.tags
+}
+
+data "azurerm_key_vault_secret" "sql_username" {
+  name         = local.sql_admin_secret_name
+  key_vault_id = module.key_vault.key_vault_id
+}
+
+data "azurerm_key_vault_secret" "sql_password" {
+  name         = local.sql_password_secret_name
+  key_vault_id = module.key_vault.key_vault_id
+}
+data "azurerm_key_vault_secret" "sql_server_name" {
+  name         = local.sql_server_name
+  key_vault_id = module.key_vault.key_vault_id
+}
+data "azurerm_key_vault_secret" "sql_db_name" {
+  name         = local.sql_db_name
+  key_vault_id = module.key_vault.key_vault_id
 }
 
 module "web_app" {
@@ -49,6 +66,14 @@ module "web_app" {
   asp_sku               = var.asp_sku
   sql_connection_string = module.sql.sql_connection_string
   tags                  = local.tags
+ 
+  envvars = {
+    "SQL_USER" = data.azurerm_key_vault_secret.sql_username.value
+    "SQL_PASSWORD" = data.azurerm_key_vault_secret.sql_password.value
+    "SQL_SERVER"   = data.azurerm_key_vault_secret.sql_server_name.value
+    "SQL_DATABASE"     = data.azurerm_key_vault_secret.sql_db_name.value
+  }
+  
 
   depends_on = [module.sql]
 }

@@ -1,5 +1,10 @@
+resource "random_password" "sql_username" {
+  length  = 20
+  special = true
+}
+
 resource "random_password" "sql_password" {
-  length  = 16
+  length  = 15
   special = true
 }
 
@@ -8,7 +13,7 @@ resource "azurerm_mssql_server" "server" {
   resource_group_name          = var.resource_group_name
   location                     = var.location
   version                      = "12.0"
-  administrator_login          = var.sql_admin_username
+  administrator_login          = random_password.sql_username.result
   administrator_login_password = random_password.sql_password.result
   tags                         = var.tags
 }
@@ -32,7 +37,7 @@ resource "azurerm_mssql_database" "db" {
 
 resource "azurerm_key_vault_secret" "sql_username" {
   name         = var.sql_admin_secret_name
-  value        = var.sql_admin_username
+  value        = random_password.sql_username.result
   key_vault_id = var.key_vault_id
 }
 resource "azurerm_key_vault_secret" "sql_password" {
@@ -40,5 +45,18 @@ resource "azurerm_key_vault_secret" "sql_password" {
   value        = random_password.sql_password.result
   key_vault_id = var.key_vault_id
   depends_on   = [random_password.sql_password]
+}
+
+resource "azurerm_key_vault_secret" "sql_server_name" {
+  name = var.sql_server_name
+  value = azurerm_mssql_server.server.name
+  key_vault_id = var.key_vault_id
+ 
+}
+
+resource "azurerm_key_vault_secret" "sql_db_name" {
+  name = var.sql_db_name
+  value = azurerm_mssql_database.db.name
+  key_vault_id = var.key_vault_id
 }
 

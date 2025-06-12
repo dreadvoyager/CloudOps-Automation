@@ -59,3 +59,4 @@ variable "acr_sku" {
   type        = string
   default     = "Standard"
 }
+

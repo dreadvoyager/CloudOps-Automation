@@ -1,8 +1,7 @@
 environment              = "dev"
 location                 = "West US"
-sql_admin_username       = "devsqladmin"
-sql_admin_secret_name    = "dev-sql-admin"
-sql_password_secret_name = "dev-sql-password"
+
+
 sql_sku_name             = "Basic"
 key_vault_sku_name       = "standard"
 

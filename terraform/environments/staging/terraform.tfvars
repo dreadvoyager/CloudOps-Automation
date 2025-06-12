@@ -1,8 +1,6 @@
 environment              = "staging"
 location                 = "West US"
-sql_admin_username       = "stagingsqladmin"
-sql_admin_secret_name    = "staging-sql-admin"
-sql_password_secret_name = "staging-sql-password"
+
 sql_sku_name             = "Basic"
 key_vault_sku_name       = "standard"
 
