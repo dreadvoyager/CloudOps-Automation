@@ -16,7 +16,7 @@ terraform {
       
     }
     kubectl = {
-      source  = "hashicorp/kubectl"
+      source  = "alekc/kubectl"
       version = "~> 2.0"
     }
   }
