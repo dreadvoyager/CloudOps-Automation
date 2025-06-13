@@ -12,11 +12,11 @@ resource "azurerm_kubernetes_cluster" "k8_cluster" {
     os_disk_type    = "Ephemeral"
     os_disk_size_gb = 30
 
-    # upgrade_settings {
-    #   drain_timeout_in_minutes      = 0
-    #   max_surge                     = "10%"
-    #   node_soak_duration_in_minutes = 0
-    #}
+    upgrade_settings {
+      drain_timeout_in_minutes      = 0
+      max_surge                     = "10%"
+      node_soak_duration_in_minutes = 0
+    }
   }
 
   identity {
