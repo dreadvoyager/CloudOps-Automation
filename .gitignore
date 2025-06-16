@@ -4,4 +4,4 @@
 *.tfplan
 *.terraform.lock.hcl
 
-/nodejs-app
+# /nodejs-app

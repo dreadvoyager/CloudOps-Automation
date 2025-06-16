@@ -1,0 +1,57 @@
+trigger: none
+pool: Default
+
+
+stages:
+- stage: BuildAndZip
+  displayName: Build and Package the application
+  jobs:
+  - job: PackageApp
+    displayName: Package App
+
+    steps:
+    - task: NodeTool@0
+      inputs: 
+        versionSpec: '16.x'
+      displayName: 'Install Node.js'
+    - script: |
+        npm install
+      displayName: 'Install npm packages'
+      workingDirectory: '$(Build.SourcesDirectory)/nodejs-app'
+    
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(Build.SourcesDirectory)/nodejs-app'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/webapp.zip'
+        replaceExistingArchive: true
+      displayName: 'Package webapp into zip file'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/webapp.zip'
+        ArtifactName: 'webapp'
+        publishLocation: 'Container'
+      displayName: 'Publish webapp artifact'
+
+- stage: DeployWebApp
+  displayName: Deploy App To Azure App Service
+  dependsOn: BuildAndZip
+  jobs:
+  - deployment: DeployWebApp
+    displayName: Deploy Web App
+
+    environment: 'dev'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebApp@1
+            inputs:
+              azureSubscription: 'adeebahmed_khan@epam.com(5cee968e-0ccf-40be-819c-34d922970b94)'
+              appType: webAppLinux
+              appName: 'webapp-intern-project-dev'
+              package: '$(Pipeline.Workspace)/webapp/webapp.zip'
+              deploymentMethod: 'zipDeploy'
+            displayName: 'Deploy webapp to Azure App Service'

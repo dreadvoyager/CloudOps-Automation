@@ -1,12 +1,13 @@
-trigger :
- batch: true
- branches:
-   include:
-     -  main
-pr:
- branches:
-   include:
-     - main
+# trigger :
+#  batch: true
+#  branches:
+#    include:
+#      -  main
+# pr:
+#  branches:
+#    include:
+#      - main
+trigger: none
 
 pool: Default
 
@@ -99,6 +100,15 @@ stages:
     dependsOn: Apply
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     jobs:
+    - job: Validation
+      displayName: 'Wait for Approval'
+      pool: server
+      timeoutInMinutes: 1440
+      steps:
+        - task: ManualValidation@0
+          inputs:
+            instructions: 'Approve to deploy to ${{ parameters.environment }} environment.'
+            onTimeout: 'reject'
     - job: Destroy
       steps:
       
@@ -115,7 +125,7 @@ stages:
             command: 'destroy'
             environmentServiceName: service_connection1
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-            commandOptions: -var-file="environments/${{ parameters.environment }}/terraform.tfvars" -out=tfplan
+            commandOptions: -var-file="environments/${{ parameters.environment }}/terraform.tfvars" 
             
 
 
