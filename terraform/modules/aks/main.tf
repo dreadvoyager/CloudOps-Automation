@@ -30,30 +30,30 @@ resource "azurerm_kubernetes_cluster" "k8_cluster" {
   tags = var.tags
 }
 
-resource "azurerm_role_assignment" "role_assignment" {
-  role_definition_name = "AcrPull"
-  scope                = var.acr_id
-  principal_id         = azurerm_kubernetes_cluster.k8_cluster.kubelet_identity[0].object_id
+# resource "azurerm_role_assignment" "role_assignment" {
+#   role_definition_name = "AcrPull"
+#   scope                = var.acr_id
+#   principal_id         = azurerm_kubernetes_cluster.k8_cluster.identity[0].principal_id
 
-  depends_on = [azurerm_kubernetes_cluster.k8_cluster]
-}
+#   depends_on = [azurerm_kubernetes_cluster.k8_cluster]
+# }
 
-resource "azurerm_key_vault_access_policy" "access_policy1" {
-  key_vault_id = var.key_vault_id
-  tenant_id    = var.tenant_id
-  object_id    = azurerm_kubernetes_cluster.k8_cluster.key_vault_secrets_provider[0].secret_identity[0].object_id
+# resource "azurerm_key_vault_access_policy" "access_policy1" {
+#   key_vault_id = var.key_vault_id
+#   tenant_id    = var.tenant_id
+#   object_id    = azurerm_kubernetes_cluster.k8_cluster.key_vault_secrets_provider[0].secret_identity[0].object_id
 
-  secret_permissions = ["Get", "List"]
+#   secret_permissions = ["Get", "List"]
 
-  depends_on = [azurerm_role_assignment.role_assignment]
-}
+#   depends_on = [azurerm_role_assignment.role_assignment]
+# }
 
-resource "azurerm_key_vault_access_policy" "access_policy2" {
-  key_vault_id = var.key_vault_id
-  tenant_id    = var.tenant_id
-  object_id    = azurerm_kubernetes_cluster.k8_cluster.kubelet_identity[0].object_id
+# resource "azurerm_key_vault_access_policy" "access_policy2" {
+#   key_vault_id = var.key_vault_id
+#   tenant_id    = var.tenant_id
+#   object_id    = azurerm_kubernetes_cluster.k8_cluster.kubelet_identity[0].object_id
 
-  secret_permissions = ["Get", "List"]
+#   secret_permissions = ["Get", "List"]
 
-  depends_on = [azurerm_key_vault_access_policy.access_policy1]
-}
+#   depends_on = [azurerm_key_vault_access_policy.access_policy1]
+# }

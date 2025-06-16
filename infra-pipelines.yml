@@ -94,5 +94,30 @@ stages:
             commandOptions: -auto-approve -var-file="environments/${{ parameters.environment }}/terraform.tfvars"
 
 
+  - stage: Destroy
+    displayName: 'Terraform Destroy'
+    dependsOn: Apply
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+    - job: Destroy
+      steps:
+      
+        - task: TerraformCLI@1
+          inputs:
+              
+            command: 'init'
+            backendServiceArm: service_connection1
+            workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+            commandOptions: -upgrade -reconfigure -backend-config="environments/${{ parameters.environment }}/backend.config"
+        - task: TerraformCLI@1
+          inputs:
+            
+            command: 'destroy'
+            environmentServiceName: service_connection1
+            workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+            commandOptions: -var-file="environments/${{ parameters.environment }}/terraform.tfvars" -out=tfplan
+            
+
+
 
     
