@@ -24,7 +24,7 @@ parameters:
 
 stages:
 - stage: BuildAndZip
-  displayName: Build and Package the application
+  displayName: Build application
   jobs:
   - job: PackageApp
     displayName: Package App
@@ -56,7 +56,7 @@ stages:
       displayName: 'Publish webapp artifact'
 
 - stage: DeployWebApp
-  displayName: Deploy App To Azure App Service
+  displayName: Deploy application
   dependsOn: BuildAndZip
   jobs:
   - deployment: DeployWebApp
