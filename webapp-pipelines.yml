@@ -1,6 +1,26 @@
+# trigger :
+#  batch: true
+#  branches:
+#    include:
+#      -  main
+# pr:
+#  branches:
+#    include:
+#      - main
+
 trigger: none
 pool: Default
 
+parameters:
+  - name: environment
+    type: string
+    displayName: Select environment to provision infrastructure
+    default: dev
+    values:
+      - dev
+      - qa
+      - staging
+      - prod
 
 stages:
 - stage: BuildAndZip
@@ -42,7 +62,7 @@ stages:
   - deployment: DeployWebApp
     displayName: Deploy Web App
 
-    environment: 'dev'
+    environment: ${{ parameters.environment }}
     strategy:
       runOnce:
         deploy:
@@ -51,7 +71,7 @@ stages:
             inputs:
               azureSubscription: 'adeebahmed_khan@epam.com(5cee968e-0ccf-40be-819c-34d922970b94)'
               appType: webAppLinux
-              appName: 'webapp-intern-project-dev'
+              appName: 'proj-${{ parameters.environment }}-webapp'
               package: '$(Pipeline.Workspace)/webapp/webapp.zip'
               deploymentMethod: 'zipDeploy'
             displayName: 'Deploy webapp to Azure App Service'
