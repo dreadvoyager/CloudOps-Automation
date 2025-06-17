@@ -74,8 +74,9 @@ module "web_app" {
   envvars = {
     "SQL_USER"     = data.azurerm_key_vault_secret.sql_username.value
     "SQL_PASSWORD" = data.azurerm_key_vault_secret.sql_password.value
-    "SQL_SERVER"   = data.azurerm_key_vault_secret.sql_server_name.value
+    "SQL_SERVER"   = "${data.azurerm_key_vault_secret.sql_server_name.value}.database.windows.net"
     "SQL_DATABASE" = data.azurerm_key_vault_secret.sql_db_name.value
+    "SQL_ENCRYPT"  = true
   }
 
 
