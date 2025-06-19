@@ -49,7 +49,7 @@ resource "azurerm_key_vault_secret" "sql_password" {
 
 resource "azurerm_key_vault_secret" "sql_server_name" {
   name         = var.sql_server_name
-  value        = azurerm_mssql_server.server.name
+  value        = "${azurerm_mssql_server.server.name}.database.windows.net" 
   key_vault_id = var.key_vault_id
 
 }
