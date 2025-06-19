@@ -77,6 +77,11 @@ stages:
                       environment="${{ parameters.environment }}"
                       aksClusterName="proj-${environment}-aks"
                       aksResourceGroup="proj-${environment}-rg"
+
+                      sed -i "s|\${acr_login_server}|${{ parameters.acr_login_server }}|g" $(Pipeline.Workspace)/manifests/deployment.yaml
+                      sed -i "s|\${app_image_name}|${{ parameters.app_image_name }}|g" $(Pipeline.Workspace)/manifests/deployment.yaml
+                      sed -i "s|\${image_tag}|${{ parameters.image_tag }}|g" $(Pipeline.Workspace)/manifests/deployment.yaml
+
                      
                       echo "ℹ️ aksClusterName=$aksClusterName"
                       echo "ℹ️ aksResourceGroup=$aksResourceGroup"
