@@ -78,10 +78,6 @@ stages:
                       aksClusterName="proj-${environment}-aks"
                       aksResourceGroup="proj-${environment}-rg"
 
-                      sed -i "s|\${acr_login_server}|${{ parameters.acr_login_server }}|g" $(Pipeline.Workspace)/manifests/deployment.yaml
-                      sed -i "s|\${app_image_name}|${{ parameters.app_image_name }}|g" $(Pipeline.Workspace)/manifests/deployment.yaml
-                      sed -i "s|\${image_tag}|${{ parameters.image_tag }}|g" $(Pipeline.Workspace)/manifests/deployment.yaml
-
                      
                       echo "ℹ️ aksClusterName=$aksClusterName"
                       echo "ℹ️ aksResourceGroup=$aksResourceGroup"
@@ -95,12 +91,12 @@ stages:
                       
                       kubectl create ns node-app || true
       
-                      sed -i 's|${acr_login_server}|$(acrLoginServer)|g' $(Pipeline.Workspace)/manifests/deployment.yaml
-                      sed -i 's|${app_image_name}|$(imageName)|g' $(Pipeline.Workspace)/manifests/deployment.yaml
-                      sed -i 's|${image_tag}|$(Build.BuildId)|g' $(Pipeline.Workspace)/manifests/deployment.yaml
+                      sed -i "s|${acr_login_server}|$(acrLoginServer)|g" $(Pipeline.Workspace)/manifests/deployment.yaml
+                      sed -i "s|${app_image_name}|$(imageName)|g" $(Pipeline.Workspace)/manifests/deployment.yaml
+                      sed -i "s|${image_tag}|$(Build.BuildId)|g" $(Pipeline.Workspace)/manifests/deployment.yaml
   
-                      sed -i 's|${key_vault_name}|$(kvName)|g' $(Pipeline.Workspace)/manifests/secret-provider.yaml
-                      sed -i 's|${tenant_id}|$(tenantId)|g' $(Pipeline.Workspace)/manifests/secret-provider.yaml
+                      sed -i "s|${key_vault_name}|$(kvName)|g" $(Pipeline.Workspace)/manifests/secret-provider.yaml
+                      sed -i "s|${tenant_id}|$(tenantId)|g" $(Pipeline.Workspace)/manifests/secret-provider.yaml
                   
 
                       sql_username="${{ parameters.environment }}-sql-admin"
