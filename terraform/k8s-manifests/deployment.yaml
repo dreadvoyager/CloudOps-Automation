@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-app
+  labels:
+    app: nodejs-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodejs-app
+  template:
+    metadata:
+      labels:
+        app: nodejs-app
+    spec:
+      containers:
+        - name: nodejs
+          image: ${acr_login_server}/${app_image_name}:${image_tag}
+          ports:
+            - containerPort: 3000
+          env:
+            - name: SQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: sql-secrets
+                  key: SQL_USER
+            - name: SQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sql-secrets
+                  key: SQL_PASSWORD
+            - name: SQL_SERVER
+              valueFrom:
+                secretKeyRef:
+                  name: sql-secrets
+                  key: SQL_SERVER
+            - name: SQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: sql-secrets
+                  key: SQL_DATABASE
+            - name: SQL_ENCRYPT
+              value: "true"
+            - name: PORT
+              value: "3000"
+          volumeMounts:
+            - name: secrets-store-inline
+              mountPath: /mnt/secrets-store
+              readOnly: true
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: nodejs-app-kv-integration

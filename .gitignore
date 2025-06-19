@@ -4,4 +4,3 @@
 *.tfplan
 *.terraform.lock.hcl
 
-*/k8s-manifests/
