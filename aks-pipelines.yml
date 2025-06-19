@@ -74,6 +74,9 @@ stages:
                     scriptType: bash
                     scriptLocation: inlineScript
                     inlineScript: |
+                      environment="${{ parameters.environment }}"
+                      aksClusterName="proj-${environment}-aks"
+                      aksResourceGroup="proj-${environment}-rg"
                      
                       echo "ℹ️ aksClusterName=$aksClusterName"
                       echo "ℹ️ aksResourceGroup=$aksResourceGroup"
