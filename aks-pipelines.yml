@@ -97,8 +97,8 @@ stages:
                       sed -i "s|\${sql_db_name}|$sql_db|g" $(Pipeline.Workspace)/manifests/secret-provider.yaml
 
 
-                      kubectl apply -f $(Pipeline.Workspace)/manifests/secret-provider.yaml -n node-app
-                      kubectl apply -f $(Pipeline.Workspace)/manifests/deployment.yaml -n node-app
-                      kubectl apply -f $(Pipeline.Workspace)/manifests/service.yaml -n node-app
+                      kubectl apply -f $(Pipeline.Workspace)/manifests/secret-provider.yaml --validate=false -n node-app
+                      kubectl apply -f $(Pipeline.Workspace)/manifests/deployment.yaml --validate=false -n node-app
+                      kubectl apply -f $(Pipeline.Workspace)/manifests/service.yaml --validate=false -n node-app
        
 
