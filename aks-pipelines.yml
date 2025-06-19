@@ -77,7 +77,7 @@ stages:
                       environment="${{ parameters.environment }}"
                       aksClusterName="proj-${environment}-aks"
                       aksResourceGroup="proj-${environment}-rg"
-                      acrLoginServer=proj$"{environment}acr.azurecr.io"
+                      acrLoginServer="proj${environment}acr.azurecr.io"
                       imageName="projappnode"
                       kvName="${environment}-ak-kv"
                       tenantId="b41b72d0-4e9f-4c26-8a69-f949f367c91d"
