@@ -4,4 +4,4 @@
 *.tfplan
 *.terraform.lock.hcl
 
-# /nodejs-app
+*/k8s-manifests/
