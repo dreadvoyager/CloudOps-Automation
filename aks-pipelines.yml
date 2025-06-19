@@ -47,9 +47,9 @@ stages:
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
               inlineScript: |
-                az acr login --name $acrName
-                docker build -t $acrLoginServer/$imageName:$(Build.BuildId) ./nodejs-app
-                docker push $acrLoginServer/$imageName:$(Build.BuildId)
+                az acr login --name $(acrName)
+                docker build -t $(acrLoginServer)/$(imageName):$(Build.BuildId) ./nodejs-app
+                docker push $(acrLoginServer)/$(imageName):$(Build.BuildId)
 
           - publish: $(Build.SourcesDirectory)/terraform/k8s-manifests
             artifact: manifests
