@@ -81,7 +81,7 @@ stages:
                       imageName="projappnode"
                       kvName="${environment}-ak-kv"
                       tenantId="b41b72d0-4e9f-4c26-8a69-f949f367c91d"
-                      USER_ASSIGNED_ID="/subscriptions/5cee968e-0ccf-40be-819c-34d922970b94/resourceGroups/MC_proj-${environment}-rg_proj-${environment}-aks/providers/Microsoft.ManagedIdentity/userAssignedIdentities/azurekeyvaultsecretsprovider-proj-${environment}-aks"
+                      USER_ASSIGNED_ID="/subscriptions/5cee968e-0ccf-40be-819c-34d922970b94/resourceGroups/MC_proj-${environment}-rg_proj-${environment}-aks_westus/providers/Microsoft.ManagedIdentity/userAssignedIdentities/azurekeyvaultsecretsprovider-proj-${environment}-aks"
 
                       az aks get-credentials --name $aksClusterName --resource-group $aksResourceGroup --admin --overwrite-existing
                       
