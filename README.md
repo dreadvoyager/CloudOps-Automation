@@ -26,7 +26,7 @@ Devops_project/
 │       ├── deployment.yaml
 │       ├── service.yaml
 │       └── secret-provider.yaml
-├── nodejs-app
+├── nodejs-app/
 ├── infra-pipelines.yml
 ├── appservice-pipelines.yml
 ├── aks-pipelines.yml
