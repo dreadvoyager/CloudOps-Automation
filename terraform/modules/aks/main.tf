@@ -9,14 +9,6 @@ resource "azurerm_kubernetes_cluster" "k8_cluster" {
     name            = var.system_node_pool_name
     node_count      = var.system_node_pool_node_count
     vm_size         = var.system_node_pool_vm_size
-    # os_disk_type    = "Ephemeral"
-    # os_disk_size_gb = 30
-
-    # upgrade_settings {
-    #   drain_timeout_in_minutes      = 0
-    #   max_surge                     = "10%"
-    #   node_soak_duration_in_minutes = 0
-    # }
   }
 
   identity {
