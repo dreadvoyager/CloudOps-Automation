@@ -1,14 +1,15 @@
-# trigger :
-#  batch: true
-#  branches:
-#    include:
-#      -  main
-# pr:
-#  branches:
-#    include:
-#      - main
-
 trigger: none
+
+pr: none
+
+resources:
+  pipelines:
+    - pipeline: infra
+      source: infra-pipeline
+      trigger:
+        branches:
+          include:
+            - main
 pool: Default
 
 parameters:
