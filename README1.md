@@ -8,57 +8,56 @@ Deploy a complete cloud environment using Terraform and set up CI/CD pipelines u
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```bash
 Devops_project/
 ├── terraform/
-│   ├── backend.tf
 │   ├── main.tf
 │   ├── variables.tf
 │   ├── outputs.tf
 │   ├── modules/
-│   │   ├── resource-group/
-│   │   ├── storage-account/
 │   │   ├── key-vault/
-│   │   ├── sql-server/
-│   │   ├── app-service/
+│   │   ├── sql/
+│   │   ├── web_app/
 │   │   ├── aks/
 │   │   └── acr/
 │   └── k8s-manifests/
 │       ├── deployment.yaml
 │       ├── service.yaml
-│       └── secretproviderclass.yaml
-├── pipelines/
-│   ├── infra-pipelines.yml
-│   ├── appservice-pipelines.yml
-│   └── aks-pipelines.yml
+│       └── secret-provider.yaml
+├── nodejs-app
+├── infra-pipelines.yml
+├── appservice-pipelines.yml
+├── aks-pipelines.yml
 └── README.md
 ```
 
 ---
 
-## 📌 Purpose of Each Folder
+##  Purpose of Each Folder
 
 | Folder | Purpose |
 |---------|---------|
 | `terraform/` | Contains the root Terraform configuration and module calls |
 | `terraform/modules/` | Reusable modules for each Azure resource |
 | `terraform/k8s-manifests/` | Kubernetes YAML manifests (deployment, service, SecretProviderClass) |
+| `nodejs-app/` | Contains application code and Dockerfile |
 | `pipelines/` | Azure DevOps multi-stage YAML pipeline definitions for infra, App Service app, and AKS app |
+| `media/` | Pdf file containing screenshots of deployed resources |
 | `README.md` | Documentation for setup, architecture, pipelines, and execution |
 
 ---
 
-## 🌟 Key Features
+##  Key Features
 
-✅ **Infrastructure as Code (Terraform)**  
+ **Infrastructure as Code (Terraform)**  
 - Remote backend using Azure Storage Account  
 - Secrets management via Azure Key Vault  
 - Modular architecture: dedicated module per Azure resource  
 - Outputs feed into CI/CD pipelines securely  
 
-✅ **CI/CD Pipelines (Azure DevOps)**  
+ **CI/CD Pipelines (Azure DevOps)**  
 - Multi-stage pipelines (Dev → QA → Stage → Prod)  
 - Pipelines:
   - `infra-pipelines.yml`: Provisions Azure infrastructure  
@@ -70,7 +69,7 @@ Devops_project/
 
 ---
 
-## 🚀 Pipelines
+##  Pipelines
 
 ### `infra-pipelines.yml`
 - Stages: `Terraform Init`, `Terraform Plan`, `Terraform Apply`
@@ -88,40 +87,17 @@ Devops_project/
 
 ---
 
-## 🔒 Branch Policies
+##  Branch Policies
 
-✅ **main branch**
+ **main branch**
 - Pull request (PR) required
 - At least one mandatory reviewer
 - Pipeline runs on PR (plan only) and gated apply on main after approval
 
 ---
 
-## ⚙️ Dynamic Configuration
 
-- `USER_ASSIGNED_ID` is generated dynamically using environment name:
-  ```bash
-  USER_ASSIGNED_ID="/subscriptions/<sub-id>/resourceGroups/MC_proj-${environment}-rg_proj-${environment}-aks/providers/Microsoft.ManagedIdentity/userAssignedIdentities/azurekeyvaultsecretsprovider-proj-${environment}-aks"
-  sed "s|\${USER_ASSIGNED_ID}|$USER_ASSIGNED_ID|g" deployment.yaml | kubectl apply -f -
-  ```
-- Pipelines conditionally run:
-  - `appservice-pipelines.yml` and `aks-pipelines.yml` trigger **only after successful infra-pipelines.yml run**
-
-Example resource dependency in pipeline:
-```yaml
-resources:
-  pipelines:
-    - pipeline: infra
-      source: InfraPipelineName
-      trigger:
-        branches:
-          include:
-            - main
-```
-
----
-
-## 📝 How to Run
+##  How to Run
 
 1️⃣ **Set up the remote backend manually (once)**  
 - Create Azure Storage Account + blob container `tfstate`
@@ -143,7 +119,7 @@ az pipelines run --name "aks-pipelines"
 
 ---
 
-## ✅ Evaluation Criteria
+## Implementation
 
 - Clear module separation and reuse
 - No hardcoded secrets — use Key Vault + CSI driver
@@ -154,7 +130,7 @@ az pipelines run --name "aks-pipelines"
 
 ---
 
-## 🗂 Assumptions
+## Assumptions
 
 - Service connections for App Service, ACR, AKS are pre-configured in Azure DevOps
 - AKS nodes have user-assigned managed identity assigned correctly per environment
