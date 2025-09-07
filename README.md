@@ -1,5 +1,5 @@
 
-# Intern Project: Azure Cloud Infrastructure & CI/CD Implementation
+# Azure Cloud Infrastructure & CI/CD Implementation
 
 ## Objective
 Deploy a complete cloud environment using Terraform and set up CI/CD pipelines using Azure DevOps for:
